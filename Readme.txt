@@ -22,7 +22,3 @@ process, etc. The build tools are heavily based on LLVM, which provides the
 necessary infrastructure to immediately generate optimized native code for a
 large number of platforms without much hassle. It is an intermediate layer that
 is well-documented, stable, and widely applied.
-
-
-
-
