@@ -5,7 +5,8 @@
 0. License
 1. Introduction
 2. Basic infrastructure
-3. ...
+3. Example code
+4. ...
 
 ## 0. License
 
@@ -46,9 +47,10 @@ Concretely, Twisted C features:
  - Flexible documentation system to replace readable header files?
  
 Twisted C's specification is freely available and distributed alongside the
-compiler and runtime library.
+compiler and runtime library. The final intent is to rewrite the compiler in
+Twisted C to completely free-host (on top of LLVM) the compiler and runtime.
 
-# Basic infrastructure
+# 3. Basic infrastructure
 
 Twisted C throws overboard the old compilation model introduced in C and kept
 in C++ and similar languages. Leveraging the power of LLVM, and CTwist's
@@ -75,3 +77,9 @@ Soft linking provides a means to quickly test an application without extensive
 linking times, while execution speed suffers (which shouldn't matter too much
 when debugging). Hard linking is more useful when releasing a final application
 to the more general public.
+
+# 4. Example code
+
+The "demo" subdirectory contains simple demo programs to showcase features that
+have reached a working state. It is an ideal place to follow the development of
+the compiler and language.

@@ -13,10 +13,16 @@
 
 // main program entry
 
-#include "begin.h"
+#include <iostream>
 
+#include "error.h"
 
 int main()
+try
 {
-    
+  
+}
+catch(error& e)
+{
+  std::cout << e.what();
 }

@@ -13,8 +13,8 @@ cmake_minimum_required (VERSION 2.6)
 project(CTwist)
 
 # Compiler
-file(GLOB compiler_source compiler/src/*.cpp)
-file(GLOB compiler_headers compiler/src/*.h)
+file(GLOB compiler_source compiler/source/*.cpp)
+file(GLOB compiler_headers compiler/source/*.h)
 include_directories(${CTwist_SOURCE_DIR}/compiler)
 add_executable(ctwist ${compiler_source})
 
