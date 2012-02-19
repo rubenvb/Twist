@@ -11,9 +11,17 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// "Hello world!" demo program
+// Internal source code representation
 
-entry
+#include <string>
+
+#include "scope.h"
+
+class AST
 {
-  std.io.print "Hello world!"
-}
+public:
+  AST(){}
+  
+private:
+  std::vector<scope> m_scopes;
+};

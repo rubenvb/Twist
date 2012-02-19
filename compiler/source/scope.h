@@ -11,9 +11,19 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// "Hello world!" demo program
+/*
+ * All elements contained in a named scope, including 
+ */
 
-entry
+#include <map>
+
+class scope
 {
-  std.io.print "Hello world!"
-}
+public:
+  scope( const std::string& name ) : m_name(name) {}
+
+private:
+  const std::string m_name;
+  
+  std::map<string,
+};
