@@ -1,0 +1,8 @@
+*.asv
+*.aux
+*.log
+thesis.tex
+*.synctex.gz
+*.jpg
+*.pdf
+*.toc
