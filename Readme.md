@@ -1,4 +1,4 @@
-# CTwist Compiler and runtime library
+# CTwist Language specification, compiler, and runtime library
 
 ## Contents
 

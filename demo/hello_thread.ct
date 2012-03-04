@@ -13,7 +13,10 @@
 
 // "Hello world!" demo program
 
+f(i){ std.io.print(i) }
+f(int i){ return i }
+
 entry
 {
-  std.io.print("Hello world!")
+  std.concurrency.thread
 }

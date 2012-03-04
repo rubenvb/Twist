@@ -1,8 +1,11 @@
 \documentclass[a4paper,11pt]{article}
 
+\usepackage{listings}
+\usepackage{verbatim}
 
+\newcommand{\tcode}[1]{\texttt{#1}}
 
-\title{The CTwist Language and Library Specification}
+\title{The CTwist, a Twisted C Language and Library Specification to take programming to infinity}
 \date{in progress}
 \author{Ruben Van Boxem}
 
@@ -18,6 +21,72 @@
 
 \section{Introduction}
 
-\section{bla}
+CTwist aka Twisted C, is a language inspired by the rich featureset of C++.
+It is an attempt to simplify most incredibly daft points in the currect C++ language, clone the most useful features, and improve those features that were badly or nonuniformly designed.
+Although the aim is feature parity or even expansion, the syntax will be radically different in order to simplify the compilation process and improve the readability of previously written code.
+Not only will the library’s interface be more uniform, the archaic C standard library will be placed outside of CTwist’s world, being only callable as a foreign interface.
+The Twisted C Standard Library will replace all necessary functionality contained in the C Standard library, ensuring a uniform callable interface without mixing inherent language style and intent.
+A shortlist of the most prominent features of Twisted C are listed below.
+
+\begin{itemize}
+  \item Strong, static typing
+  \item Inheritable fundamental types
+  \item Strong typedefs
+  \item Classes
+  \item Parametric polymorphism (often referred to as generics or templates)
+  \item Low level memory access (raw pointers to arbitrary memory locations)
+  \item Exceptions
+  \item No pre-processor
+  \item ABI standardization (to the level of CTwist object code, different OSes enforce different low-level ABI’s CTwist cannot change)
+  \item Unicode support, inside and out.
+  \item Integrated multithreading in basic language constructs.
+  \item A large Standard library, including a lot of functionality that has been wrapped over and over by different C and C++ libraries like Boost, Qt, etc...
+  \item Type inference?
+  \item User-defined operators?
+  \item Integrated documentation generation (to replace readable headers)?
+\end{itemize}
+Example programs with a tutorial-like explanation can be found in section \ref{sec:examples}, displaying typical syntax to express common programming constructs.
+
+\section{Files and environment}
+
+In an attempt to bring order to the chaos that C-like languages face and cause a lot of grief for programmers, CTwist defines the following strict rules to be followed in all files involved in CTwist source and object code.
+
+  \subsection{Source files}
+
+Source files will be encoded in UTF-8 to avoid byte order issues or obsolete system encodings being used.
+Both \verb \ \tcode{n} and \verb \ \tcode{r} \verb \ \tcode{n} will be valid and must be accepted interchangeable by the compiler (different files may have different line endings, one line ending type per file).
+\\ ...
+
+  \subsection{Compilation model}
+
+The reference compiler is implemented on top of the LLVM infrastructure, and therefore the reference compilation model will base itself upon the LLVM bytecode representation, which is a flexible and platform-independent compiled and perhaps optimized intermediary representation, allowing for easy link-time optimization (through LLVM machinery).
+Alongside the LLVM bytecode, there will be a binary representation of “generic” code, necessary to provide C++ template functionality without a “header” concept.
+Essentially, a compiled “Twisted Object” file will consist of the following:
+\begin{itemize}
+  \item Binary (compiler) representation of function and class declarations (the compiler’s Abstract Syntax Tree)
+  \item Symbol table to match the declarations to the LLVM bytecode.
+  \item Binary (compiler) representation of generics
+  \item LLVM bytecode for non-generic functions (specializations).
+\end{itemize}
+The binary representation will be in such a form that it can be quickly loaded by the compiler on demand.
+The LLVM bytecode is only present for the purpose of producing a final binary, and not used in compiling source code.
+
+
+\section{Program structure}
+
+
+\section{Examples}
+This section contains expressive and classic examples of programs and constructs often employed in tutorial or real programs and libraries.
+
+  \subsection{Beginner programs}
+
+    \subsubsection{“Hello World!”}
+
+\begin{lstlisting}
+entry
+{
+    std.io.print( “Hello World!” )
+}
+\end{lstlisting}
 
 \end{document}
