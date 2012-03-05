@@ -1,6 +1,8 @@
 \documentclass[a4paper,11pt]{article}
 
 \usepackage{listings}
+\lstset{basicstyle=\ttfamily,numbers=left,numberstyle=\tiny,}
+
 \usepackage{verbatim}
 
 \newcommand{\tcode}[1]{\texttt{#1}}
@@ -63,13 +65,12 @@ The reference compiler is implemented on top of the LLVM infrastructure, and the
 Alongside the LLVM bytecode, there will be a binary representation of “generic” code, necessary to provide C++ template functionality without a “header” concept.
 Essentially, a compiled “Twisted Object” file will consist of the following:
 \begin{itemize}
-  \item Binary (compiler) representation of function and class declarations (the compiler’s Abstract Syntax Tree)
+  \item Binary (compiler) representation of functions and classes declarations, including the defini (the compiler’s Abstract Syntax Tree)
   \item Symbol table to match the declarations to the LLVM bytecode.
-  \item Binary (compiler) representation of generics
-  \item LLVM bytecode for non-generic functions (specializations).
+  \item LLVM bytecode for non-generic functions and fully specialized generic functions.
 \end{itemize}
-The binary representation will be in such a form that it can be quickly loaded by the compiler on demand.
-The LLVM bytecode is only present for the purpose of producing a final binary, and not used in compiling source code.
+The binary representation will be in such a form that it can be quickly loaded by the compiler when needed.
+It contains all information needed to resolve parametric polymorphic resolution, and check if the function or class is valid for that particular argument.
 
 
 \section{Program structure}
@@ -78,15 +79,86 @@ The LLVM bytecode is only present for the purpose of producing a final binary, a
 \section{Examples}
 This section contains expressive and classic examples of programs and constructs often employed in tutorial or real programs and libraries.
 
+\section{Twisted Standard Library}
+  \subsection{Components}
+
+Below is the list of Library Components in the Twisted Standard Library.
+\begin{itemize}
+  \item Algorithms: basic, widely applicable algorithms.
+  \item Input/Output: I/O to/from numerous devices like GUI, files, and console.
+  \item Math: extensive mathematical functionality framework
+  \begin{itemize}
+    \item Basic: basic math functions like \tcode{exp}, \tcode{sin}, \tcode{sqrt}, etc...
+    \item Extended: Advanced math functions, in general terms derived from the Hypergeometric function, like \tcode{besselj}, \tcode{erf}, etc...
+    \item String to function parsing, extendible with custom operators.
+    \item Integration: Basic numerical integration routines.
+  \end{itemize}
+  \item Containers: various useful container classes
+  \item Strings: UTF-8/16/32 strings and associated routines
+  \item Concurrency
+  \begin{itemize}
+    \item Threads
+    \item Mutex and other Concurrent control objects and functions...
+  \end{itemize}
+  \item File system: abstract view of the system's file system, useful to manipulate directory paths and open files.
+  \item Signals
+  \item GUI
+  \item ...
+\end{itemize}
+Below is a detailed description of what each Component contains and how different Components can work together.
+TODO
+
   \subsection{Beginner programs}
 
-    \subsubsection{“Hello World!”}
+    \subsubsection{``Hello World!"}
 
+The classic first program a programmer meets whe learning a new language is without a doubt ``Hello World!".
+It presents the minimal program structure and introduces a way to do textual output.
 \begin{lstlisting}
 entry
 {
-    std.io.print( “Hello World!” )
+    std.io.print( "Hello World!" )
 }
 \end{lstlisting}
+\lstinline|entry| is CTwist's version of the \lstinline|main| function in languages like C, C++, C\# or Java.
+In contrast to other, more primitive languages, it takes no arguments under any circumstances.
+It has no return type, and is not strictly a function that could be called in a devious manner.
+A code block is surrounded by \tcode{\{} and \tcode{\}} and is used to designate several lines of code are to be seen as one entity.
+A Twisted C statement does not have to end in a semicolon ``;", but it may.
+A semicolon is useful if you want to stuff more than one statement on one line of code.
+\tcode{std.io.output} is the fully qualified call to the \tcode{output} function in namespace \tcode{io} in namespace \tcode{std}, which designates the I/O Standard Library component.
+The \tcode{std.io.output} function outputs to the Standard Output Device, which can be reseated by the programmer if deemed necessary.
+An alternative version using the \tcode{import} keyword is written below, allowing the function call to be significantly simplified:
+\begin{lstlisting}
+import std.io
+entry
+{
+    output( "Hello World!" )
+}
+\end{lstlisting}
+Note that in building this program, absolutely no libraries need to be manually linked when producing an executable.
+The \tcode{import} statement ensures that the resulting Twisted Object file contains a directive to pull in the \tcode{std.io} Library Component.
+It also functions as a C-style \tcode{\#include}, pulling in all the functions and types in the Component \tcode{std.io}.
+
+    \subsubsection{``Hello World!" in a file}
+
+Instead of outputting the string to the Standard Output Device, the following program writes it to a file named \tcode{Hello World!.txt}.
+\begin{lstlisting}
+import std.io
+entry
+{
+    file f = file.open( "Hello World!.txt" )
+    f.output( "Hello World!" )
+    f.close
+}
+\end{lstlisting}
+In this program, \tcode{std.io} has once again been imported.
+It includes basic file I/O, and a class called \tcode{file}, which (not surprisingly) represents a file in Twisted C.
+The last line is not strictly necessary, as the file will get closed automatically when the object \tcode{f} goes out of scope at the closing \tcode{\}}.
+
+    \subsubsection{``Hello From Thread!"}
+
+The following program demonstrates the simplest of Concurrency features.
+
 
 \end{document}

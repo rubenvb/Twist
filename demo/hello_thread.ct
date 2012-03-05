@@ -11,12 +11,14 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// "Hello world!" demo program
+// "Hello from thread!" demo program
 
 f(i){ std.io.print(i) }
-f(int i){ return i }
 
 entry
 {
-  std.concurrency.thread
+  std.concurrency.thread t1(f,1)
+  std.concurrency.thread t2(f,2)
+  
+  std.concurrency.thread.join_all()
 }
