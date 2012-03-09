@@ -35,14 +35,15 @@ A shortlist of the most prominent features of Twisted C are listed below.
   \item Inheritable fundamental types
   \item Strong typedefs
   \item Classes
-  \item Parametric polymorphism (often referred to as generics or templates)
-  \item Low level memory access (raw pointers to arbitrary memory locations)
+  \item Parametric polymorphism for functions and user-defined types.
+  \item Low level memory access (raw read-write to arbitrary memory locations)
   \item Exceptions
   \item No pre-processor
   \item ABI standardization (to the level of CTwist object code, different OSes enforce different low-level ABI’s CTwist cannot change)
   \item Unicode support, inside and out.
   \item Integrated multithreading in basic language constructs.
   \item A large Standard library, including a lot of functionality that has been wrapped over and over by different C and C++ libraries like Boost, Qt, etc...
+  \item JIT execution of code through LLVM's JIT capabilities
   \item Type inference?
   \item User-defined operators?
   \item Integrated documentation generation (to replace readable headers)?
@@ -59,7 +60,41 @@ Source files will be encoded in UTF-8 to avoid byte order issues or obsolete sys
 Both \verb \ \tcode{n} and \verb \ \tcode{r} \verb \ \tcode{n} will be valid and must be accepted interchangeable by the compiler (different files may have different line endings, one line ending type per file).
 \\ ...
 
+  \subsection{Binary files}
+
+Binary files can take two forms: native and intermediate.
+Native files contain only architecture/OS-native code that can be executed or loaded by the targetted OS.
+They are meant for end-user execution, not development.
+Intermediate files are still platform-independent and contain a platform-independent compiled representation of the source code.
+These are meant to be used for development, and provide a means to quickly test minor changes without recompiling and linking everything.
+A combination of both is possible as well, and handy only for increasing development speed (optimizations can be done once, and the resulting code is reused from then on).
+So "native" and "intermediate" only affects the type of compiled code, and does not say anything about generic code presence.
+
+  \subsection{Native Binaries}
+
+Native binaries do not contain generic code.
+Examples include executables, Windows DLL's, Linux' \tcode{.so} files, Mac OS X' \tcode{.dylib} files.
+In general, these binary files only depend on core OS components, and any Twisted C libraries they use.
+Optionally, legacy C code can be linked in through a compatibility interface \ref{sec:c_compatibility}, which is also used to call into OS APIs in a transparent fashion.
+
+  \subsection{Intermediate files}
+
+Intermediate files contain everything the CTwist compiler needs to generate native binaries.
+Nothing prevents an implementation to only provide a compiler AST representation in an intermediate file.
+This will allow for all forms of syntax and well-formedness checking, but is a bit inefficient to debug exection (code will have to be generated over and over).
+Along with AST representation of code, LLVM bytecode of non-generic constructs can be present.
+This bytecode can be pre-optimized, to increase the code generation phase. 
+
+  \subsection{Hybrid files}
+
+Hybrid files contain non-native code and 
+
   \subsection{Compilation model}
+    \subsubsection{Phases of translation}
+
+Translation is the process in which a CTwist compiler converts source code input into a Twisted Object file or 
+
+    \subsubsection{Reference implementation}
 
 The reference compiler is implemented on top of the LLVM infrastructure, and therefore the reference compilation model will base itself upon the LLVM bytecode representation, which is a flexible and platform-independent compiled and perhaps optimized intermediary representation, allowing for easy link-time optimization (through LLVM machinery).
 Alongside the LLVM bytecode, there will be a binary representation of “generic” code, necessary to provide C++ template functionality without a “header” concept.
@@ -70,14 +105,20 @@ Essentially, a compiled “Twisted Object” file will consist of the following:
   \item LLVM bytecode for non-generic functions and fully specialized generic functions.
 \end{itemize}
 The binary representation will be in such a form that it can be quickly loaded by the compiler when needed.
-It contains all information needed to resolve parametric polymorphic resolution, and check if the function or class is valid for that particular argument.
-
+It contains all information needed to resolve parametric polymorphic resolution, both for functions and classes.
+The binary representation will be open and fully specified, with reference tools to verify and test the validity.
+\\ ...
 
 \section{Program structure}
+  \subsection{Introductory note}
 
 
-\section{Examples}
-This section contains expressive and classic examples of programs and constructs often employed in tutorial or real programs and libraries.
+  \subsection{Entry point}
+
+Any Twisted Object file can contain a formal \emph{entry point}.
+This means both the conceptual 
+
+\section{C compatibility} \label{sec:c_compatibility}
 
 \section{Twisted Standard Library}
   \subsection{Components}
@@ -108,7 +149,10 @@ Below is the list of Library Components in the Twisted Standard Library.
 Below is a detailed description of what each Component contains and how different Components can work together.
 TODO
 
-  \subsection{Beginner programs}
+\section{Examples}
+This section contains expressive and classic examples of programs and constructs often employed in tutorial or real programs and libraries.
+
+  \subsection{Beginner-level examples}
 
     \subsubsection{``Hello World!"}
 
@@ -136,7 +180,7 @@ entry
     output( "Hello World!" )
 }
 \end{lstlisting}
-Note that in building this program, absolutely no libraries need to be manually linked when producing an executable.
+Note that in building this program, absolutely no libraries need to be manually linked when producing an executable (they're not even mentioned "under the hood").
 The \tcode{import} statement ensures that the resulting Twisted Object file contains a directive to pull in the \tcode{std.io} Library Component.
 It also functions as a C-style \tcode{\#include}, pulling in all the functions and types in the Component \tcode{std.io}.
 
@@ -158,7 +202,12 @@ The last line is not strictly necessary, as the file will get closed automatical
 
     \subsubsection{``Hello From Thread!"}
 
-The following program demonstrates the simplest of Concurrency features.
+The following program demonstrates the simplest of Concurrency features: a thread of execution.
 
+  \subsection{Intermediate examples}
+    \subsubsection{Calling C code}
+
+  \subsection{Advanced examples}
+    \subsubsection{None yet}
 
 \end{document}

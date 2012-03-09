@@ -20,7 +20,7 @@
 class scope
 {
 public:
-  scope( const std::string& name ) : m_name(name) {}
+  scope( const std::string& name = "" ) : m_name(name) {}
 
 private:
   const std::string m_name;
