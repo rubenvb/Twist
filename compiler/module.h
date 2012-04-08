@@ -11,17 +11,24 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// Internal source code representation
+/*
+ * Internal representation of a self-contained module
+ */
 
-#include <string>
+#ifndef TWISTED_MODULE
+#define TWISTED_MODULE
 
-#include "scope.h"
+#include <map>
 
-class AST
+class module
 {
 public:
-  AST(){}
-  
+  module( const std::string& name ) : m_name(name) {}
+
 private:
-  std::vector<scope> m_scopes;
+  const std::string m_name;
+  
+  std::map<string,type>
 };
+
+#endif

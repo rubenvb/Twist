@@ -13,15 +13,16 @@ cmake_minimum_required (VERSION 2.6)
 project(CTwist)
 
 # Compiler
-file(GLOB compiler_source compiler/source/*.cpp)
-file(GLOB compiler_headers compiler/source/*.h)
+file(GLOB compiler_source compiler/*.cpp)
+file(GLOB compiler_headers compiler/*.h)
 include_directories(${CTwist_SOURCE_DIR}/compiler)
 add_executable(ctwist ${compiler_source})
+
 
 # runtime - built with new compiler
 
 # tests
-#enable_testing()
-#set(TEST_DIR "${KISS_SOURCE_DIR}/Test")
-#add_test("types/compiler_traits" ${CMAKE_CXX_COMPILER} "${TEST_DIR}/types/compiler_traits.cxx" -I${KISS_SOURCE_DIR}/include -std=c++11 -ocompiler_traits)
+enable_testing()
+set(COMPILER_TESTS "${CTwist_SOURCE_DIR}/compiler/test")
+add_test("hello" ctwist 2>&1 )
 

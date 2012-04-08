@@ -16,6 +16,9 @@
  *  various errors that can occur in the compilation process
  */
 
+#ifndef TWISTED_ERROR
+#define TWISTED_ERROR
+
 #include <string>
 
 #include "utility.h"
@@ -40,3 +43,5 @@ public:
           + ", column " + to_string(column_number) + ":\n\t"
           + message ) {}
 };
+
+#endif

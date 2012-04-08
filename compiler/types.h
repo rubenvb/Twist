@@ -12,18 +12,19 @@
  **/
 
 /*
- * All elements contained in a named scope, including 
+ * Types:
+ *  - standard library includes
+ *  - typedefs and type adaptors
  */
 
+#ifndef TWISTED_TYPES
+#define TWISTED_TYPES
+
 #include <map>
+#include <string>
 
-class scope
-{
-public:
-  scope( const std::string& name = "" ) : m_name(name) {}
+class type;
 
-private:
-  const std::string m_name;
-  
-  std::map<string,
-};
+typedef std::map<std::string, type> type_map;
+
+#endif

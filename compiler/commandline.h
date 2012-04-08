@@ -11,18 +11,23 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// main program entry
+// Commandline processing
 
-#include <iostream>
+#ifndef TWISTED_COMMANDLINE
+#define TWISTED_COMMANDLINE
 
-#include "error.h"
+#include "settings.h"
 
-int main()
-try
+void
+#ifdef _WIN32
+process_commandline(settings s, int, char*[])
+#else
+process_commandline(int argc, char* argv[])
+#endif
 {
+  //FIXME assuming we're building a final application
   
+   
 }
-catch(error& e)
-{
-  std::cout << e.what();
-}
+
+#endif
