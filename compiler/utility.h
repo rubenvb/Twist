@@ -11,7 +11,12 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// Various utility functions
+/*
+ * Various utility functions
+ */
+
+#ifndef TWISTED_UTILITY
+#define TWISTED_UTILITY
 
 #include <iosfwd>
 #include <map>
@@ -72,3 +77,5 @@ bool map_value(const std::map<Y,T> &map, const Y &key, T &value)
     else
         return false;
 }
+
+#endif

@@ -22,9 +22,13 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
+// C++ types
+typedef std::vector<std::string> string_vector;
+
+// Local types
 class type;
-
 typedef std::map<std::string, type> type_map;
 
 #endif

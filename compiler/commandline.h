@@ -11,20 +11,27 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// Commandline processing
+/*
+ * Commandline processing
+ */
 
 #ifndef TWISTED_COMMANDLINE
 #define TWISTED_COMMANDLINE
 
+#include "platform.h"
 #include "settings.h"
+#include "types.h"
 
 void
 #ifdef _WIN32
-process_commandline(settings s, int, char*[])
-#else
-process_commandline(int argc, char* argv[])
-#endif
+process_commandline(settings &s, int, char*[])
 {
+  string_vector arguments;
+#else
+process_commandline(settings &s, int argc, char* argv[])
+{
+  string_vector arguments(argv+1, argv+argc);
+#endif
   //FIXME assuming we're building a final application
   
    

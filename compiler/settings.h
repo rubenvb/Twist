@@ -11,7 +11,9 @@
  * If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
  **/
 
-// Program-wide settings
+/*
+ * Program-wide settings
+ */
 
 #ifndef TWISTED_SETTINGS
 #define TWISTED_SETTINGS
