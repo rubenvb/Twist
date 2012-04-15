@@ -18,7 +18,7 @@
 #ifndef TWISTED_MODULE
 #define TWISTED_MODULE
 
-#include <map>
+#include "types.h"
 
 class module
 {
@@ -27,8 +27,8 @@ public:
 
 private:
   const std::string m_name;
-  
-  std::map<string,type>
+
+  type_map m_types;
 };
 
 #endif

@@ -45,10 +45,9 @@ class syntax_error : public error
 {
 public:
   syntax_error(const std::string& message, const std::string& filename,
-               const std::size_t line_number, const std::size_t column_number)
+               const size_t line_number/*, const std::size_t column_number*/)
   : error("Syntax error in " + filename + " on line " + to_string(line_number)
-          + ", column " + to_string(column_number) + ":\n\t"
-          + message ) {}
+          + /*", column " + to_string(column_number) +*/ ":\n\t" + message ) {}
 };
 
 #endif

@@ -19,6 +19,7 @@
 #define TWISTED_SETTINGS
 
 #include "enums.h"
+#include "types.h"
 
 struct settings
 {
@@ -28,17 +29,27 @@ struct settings
     static_library,
     dynamic_library
   } building; // type of output file
-  settings(enum building b) : building(b)
-  {   }
+  const std::string module_name;
+
+  settings(enum building b)
+  : building(b) {}
 
   bool add_file(const file& file)
   {
     filetype type = determine_filetype(file.first); // throws on error
     return m_files[type].insert(file).second;
   }
+  const file& first_file() const
+  {
+    const auto it = m_files.find(filetype::source);
+    if(it == m_files.end())
+      throw error("No source files in file list.");
+    else
+      return *(it->second.begin());
+  }
   
 private:
-  std::map<filetype,file_set> m_files;
+  std::map<filetype, file_set> m_files;
 };
 
 #endif

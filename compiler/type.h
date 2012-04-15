@@ -12,26 +12,17 @@
  **/
 
 /*
- * Types:
- *  - standard library includes
- *  - typedefs and type adaptors
+ * Generic type info
  */
 
-#ifndef TWISTED_TYPES
-#define TWISTED_TYPES
+#ifndef TWISTED_TYPE
+#define TWISTED_TYPE
 
-#include <map>
-#include <set>
-#include <string>
-#include <vector>
+class type
+{
+public:
+  type() {}
 
-// C++ types
-typedef std::vector<std::string> string_vector;
-
-// Ctwist compiler specific types
-#include "type.h"
-typedef std::map<std::string, type> type_map;
-typedef std::pair<std::string, time_t> file;
-typedef std::set<file> file_set;
+};
 
 #endif

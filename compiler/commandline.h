@@ -53,8 +53,7 @@ void process_commandline(settings& settings, int argc, char* argv[])
         throw commandline_error(argument + " is not a valid filename.");
     }
     else if(index == 1)
-    {
-    }
+      throw commandline_error("Arguments beginning with \'-\' not yet implemented.");
     else if(index == 2)
       throw commandline_error("Arguments beginning with \'--\' not yet implemented.");
     else

@@ -20,6 +20,7 @@
 
 #include "types.h"
 
+#include <algorithm>
 #include <iosfwd>
 #include <map>
 #include <sstream>
@@ -27,6 +28,23 @@
 #include <vector>
 
 #include <sys/stat.h>
+
+// return true if container contains element
+inline bool contains( const std::string &token, const std::string &characters )
+{
+    return ( std::find_first_of(token.begin(), token.end(), characters.begin(),
+                                characters.end()) != token.end() );
+}
+template <class K, class V>
+bool contains( const std::map<K, V> &map, const K key )
+{
+    return ( map.find(key) != map.end());
+}
+template <class container>
+bool contains( const container &cont, const typename container::value_type &elem )
+{
+   return ( std::find(cont.begin(), cont.end(), elem) != cont.end() );
+}
 
 // conversion to string
 template <typename T>
