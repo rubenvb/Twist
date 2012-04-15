@@ -18,6 +18,8 @@
 #ifndef TWISTED_SETTINGS
 #define TWISTED_SETTINGS
 
+#include "enums.h"
+
 struct settings
 {
   enum building
@@ -28,9 +30,15 @@ struct settings
   } building; // type of output file
   settings(enum building b) : building(b)
   {   }
-  
-  
 
+  bool add_file(const file& file)
+  {
+    filetype type = determine_filetype(file.first); // throws on error
+    return m_files[type].insert(file).second;
+  }
+  
+private:
+  std::map<filetype,file_set> m_files;
 };
 
 #endif

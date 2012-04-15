@@ -34,10 +34,17 @@ private:
   std::string m_message;
 };
 
+class commandline_error : public error
+{
+public:
+  commandline_error(const std::string& message)
+  : error("Commanline error: " + message) {}
+};
+
 class syntax_error : public error
 {
 public:
-  syntax_error(const std::string &message, const std::string &filename,
+  syntax_error(const std::string& message, const std::string& filename,
                const std::size_t line_number, const std::size_t column_number)
   : error("Syntax error in " + filename + " on line " + to_string(line_number)
           + ", column " + to_string(column_number) + ":\n\t"

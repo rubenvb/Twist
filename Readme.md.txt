@@ -78,6 +78,12 @@ linking times, while execution speed suffers (which shouldn't matter too much
 when debugging). Hard linking is more useful when releasing a final application
 to the more general public.
 
+The first Twisted C compiler will be a barebones implementation, missing some
+awesome features that would better rely on the Twisted Library, which is itself
+written in Twisted C. This compiler will serve as a testbed for the first
+implementation and be not maintained further once everything is set up
+properly.
+
 # 4. Example code
 
 The "demo" subdirectory contains simple demo programs to showcase features that

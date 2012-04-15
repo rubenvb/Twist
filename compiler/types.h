@@ -21,14 +21,17 @@
 #define TWISTED_TYPES
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
 // C++ types
 typedef std::vector<std::string> string_vector;
 
-// Local types
+// Ctwist compiler specific types
 class type;
 typedef std::map<std::string, type> type_map;
+typedef std::pair<std::string, time_t> file;
+typedef std::set<file> file_set;
 
 #endif
