@@ -32,6 +32,7 @@ void add_file(settings&, const std::string&);
 void process_commandline(settings& settings, int argc, char* argv[])
 {
   const string_vector arguments(argv+1, argv+argc);
+  bool output_name_set = false;
 
   std::cout << "Arguments:\n";
   std::for_each(arguments.begin(), arguments.end(), 
@@ -40,7 +41,7 @@ void process_commandline(settings& settings, int argc, char* argv[])
 
   for(auto arg_it = arguments.begin(); arg_it != arguments.end(); ++arg_it)
   {
-    const std::string& argument = *arg_it;
+    std::string argument = *arg_it;
     const size_t index = argument.find_first_not_of("-");
     if(index == 0)
     { // Filename or second part of previous argument
@@ -53,12 +54,31 @@ void process_commandline(settings& settings, int argc, char* argv[])
         throw commandline_error(argument + " is not a valid filename.");
     }
     else if(index == 1)
-      throw commandline_error("Arguments beginning with \'-\' not yet implemented.");
+    {
+      argument = argument.substr(index,std::string::npos);
+      if(argument == "o")
+      {
+        if(++arg_it != arguments.end())
+        {
+          settings.output_filename = *arg_it;
+          output_name_set = true;
+        }
+        else
+          throw commandline_error("\'-o\' must be followed by the output filename.");
+      }
+      else
+        throw commandline_error("Most arguments beginning with \'-\' not yet implemented.");
+    }
     else if(index == 2)
       throw commandline_error("Arguments beginning with \'--\' not yet implemented.");
     else
       throw commandline_error("Invalid argument: " + argument + ".");
   }
+  std::cout << "Number of source files: "
+            << settings.number_of_files(filetype::source) << ".\n"
+            << "Number of object files: " 
+            << settings.number_of_files(filetype::object) << ".\n"
+		    << "Output filename: " << settings.output_filename << ".";
 }
 
 #endif

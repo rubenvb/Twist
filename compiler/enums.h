@@ -26,6 +26,10 @@ enum class filetype
   source, // .ct
   object // .to
 };
+static const std::map<filetype, std::string> filetype_map
+                     = { {filetype::source, "source" },
+                         {filetype::object, "object" } };
+
 filetype determine_filetype(const std::string& filename)
 {
   const size_t index = filename.rfind(".");

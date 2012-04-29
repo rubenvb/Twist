@@ -12,23 +12,24 @@
  **/
 
 /*
- * Internal representation of a self-contained module
+ * Class that puts all the pieces together
  */
 
-#ifndef TWISTED_MODULE
-#define TWISTED_MODULE
+class module;
+class settings;
 
-#include "types.h"
-
-class module
+class builder
 {
 public:
-  module(const std::string& name) : m_name(name) {}
-
+  builder(const settings& settings, module& module)
+  : m_settings(settings), m_module(module)
+  {}
+  
+  void heavy_lifting()
+  {
+  }
+  
 private:
-  const std::string m_name;
-
-  type_map m_types;
+  const settings& m_settings;
+  module& m_module;
 };
-
-#endif

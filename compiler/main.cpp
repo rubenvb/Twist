@@ -18,9 +18,10 @@
 #include <iostream>
 
 #include "commandline.h"
+#include "builder.h"
 #include "error.h"
 #include "module.h"
-#include "source_parser.h"
+#include "parser.h"
 #include "settings.h"
 
 int main(int argc, char* argv[])
@@ -29,13 +30,12 @@ try
   std::cout << "Twisted C compiler, version 0.0.1.\n";
   
   // assume plain app by default
-  settings settings(settings::app);
-  process_commandline(settings, argc, argv);
-  
-  module m(settings.module_name);
-  source_parser p(settings);
-  p.load_module();
+  settings s(settings::app, "default");
+  process_commandline(s, argc, argv);
 
+  module m(s.module_name);
+  builder b(s,m);
+  b.heavy_lifting();
 }
 catch(error& e)
 {

@@ -30,24 +30,33 @@ struct settings
     dynamic_library
   } building; // type of output file
   const std::string module_name;
+  std::string output_filename;
 
-  settings(enum building b)
-  : building(b) {}
+  settings(enum building b, const std::string& filename)
+  : building(b), output_filename(filename) {}
 
   bool add_file(const file& file)
   {
     filetype type = determine_filetype(file.first); // throws on error
     return m_files[type].insert(file).second;
   }
-  const file& first_file() const
+  const file_set& files(const filetype type) const
   {
-    const auto it = m_files.find(filetype::source);
+    const auto it = m_files.find(type);
     if(it == m_files.end())
-      throw error("No source files in file list.");
+      throw error("No files of type " + map_value(filetype_map, type) + "in file list.");
     else
-      return *(it->second.begin());
+      return it->second;
   }
-  
+  const size_t number_of_files(const filetype type) const
+  {
+    const auto it = m_files.find(type);
+    if(it == m_files.end())
+      return 0;
+    else
+      return it->second.size();
+  }
+
 private:
   std::map<filetype, file_set> m_files;
 };
