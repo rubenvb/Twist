@@ -33,7 +33,7 @@ struct settings
   std::string output_filename;
 
   settings(enum building b, const std::string& filename)
-  : building(b), output_filename(filename) {}
+  : building(b), output_filename(filename), m_files(), m_loaded_files() {}
 
   bool add_file(const file& file)
   {
@@ -59,6 +59,7 @@ struct settings
 
 private:
   std::map<filetype, file_set> m_files;
+  std::map<filetype, file_set> m_loaded_files;
 };
 
 #endif

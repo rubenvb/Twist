@@ -15,6 +15,8 @@
  * Class that puts all the pieces together
  */
 
+#include "parser.h"
+
 class module;
 class settings;
 
@@ -27,6 +29,11 @@ public:
   
   void heavy_lifting()
   {
+    parser p(m_settings, m_module);
+    while(!p.all_files_parsed())
+    {
+      p.parse_next_source_file();
+    }
   }
   
 private:

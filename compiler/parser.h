@@ -37,7 +37,11 @@ public:
   : m_settings(settings), m_module(module)
   {}
 
-  void load_module()
+  bool all_files_parsed() const
+  {
+    // Find all file_set's and handle missing ones 
+  }
+  void load_modules()
   {
     const file_set& source_files = m_settings.files(filetype::source);
     for(auto sources_it = source_files.begin(); sources_it != source_files.end(); ++sources_it)

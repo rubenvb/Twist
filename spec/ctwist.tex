@@ -121,9 +121,18 @@ The result is that multiple Twisted Objects with entry points defined can be lin
 \section{C compatibility} \label{sec:c_compatibility}
 
 Most if, not all, OS APIs are written in C.
-CTwist, if it wants to be a compiled to native language, will require a simple and flexible way to 
+CTwist, as a flexible compiled language, has an easy interface to C libraries.
+The basic C integer types and pointers to structs are allowed in C interface declarations.
+Other additional keywords are ignored and it is the task of the interface user to ensure the CTwist wrapper ensures the calls to the external functions are valid.
+As a simple example, the following code fragment declares an external C function in the reserved namespace C:
+\begin{lstlisting}
+namespace C
+{
+  // Library should be listed here. OS-dependent names?
+}
+\end{lstlisting}
 
-\section{Twisted Standard Library}
+\section{Twisted Standard Library -  defer to "French KISS" reference implementation}
   \subsection{Components}
 
 Below is the list of Library Components in the Twisted Standard Library.
