@@ -19,8 +19,7 @@ endif()
 file(GLOB compiler_source compiler/*.cpp)
 file(GLOB compiler_headers compiler/*.h)
 include_directories(${CTwist_SOURCE_DIR}/compiler)
-add_executable(ctwist ${compiler_source})
-
+add_executable(ctwist ${compiler_source} ${compiler_headers})
 
 # runtime - built with new compiler
 

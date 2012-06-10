@@ -3,6 +3,8 @@
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily,numbers=left,numberstyle=\tiny,}
 
+\usepackage{multicol}
+
 \usepackage{verbatim}
 
 \newcommand{\tcode}[1]{\texttt{#1}}
@@ -53,10 +55,33 @@ Example programs with a tutorial-like explanation can be found in section \ref{s
 \section{Files and environment}
 
 In an attempt to bring order to the chaos that C-like languages face and cause a lot of grief for programmers, CTwist defines the following strict rules to be followed in all files involved in CTwist source and object code.
+All files will be encoded in UTF-8 to avoid byte order issues or obsolete system encodings being used.
+
+  \subsection{Module description files}
+
+Module description files are nothing more than a list of source files to be compiled at once into a Twisted Module.
+This avoids two platform-specific problems:
+\begin{enumerate}
+  \item commandline length limit if there are a lot of files,
+  \item unicode filenames that may nor be easily usable on the commandline.
+\end{enumerate}
+The file has the following format:
+\begin{lstlisting}
+file1.ct
+file2.ct
+directory/file3.ct
+../otherdirectory/file4.ct
+\end{lstlisting}
+Although it is discouraged to use \tcode{..} for module files, it may not be possible everywhere.
+The directories are searched relative to the location of the module description file.
+In the simplest case, one can also use the following form:
+\begin{lstlisting}
+*.ct
+\end{lstlisting}
+The \tcode{*} is a universal wildcard, which can be replaced by any number of any characters, thus gathering all the 
 
   \subsection{Source files}
 
-Source files will be encoded in UTF-8 to avoid byte order issues or obsolete system encodings being used.
 Both \verb \ \tcode{n} and \verb \ \tcode{r} \verb \ \tcode{n} will be valid and must be accepted interchangeable by the compiler (different files may have different line endings, one line ending type per file).
 \\ ...
 
@@ -126,11 +151,12 @@ The basic C integer types and pointers to structs are allowed in C interface dec
 Other additional keywords are ignored and it is the task of the interface user to ensure the CTwist wrapper ensures the calls to the external functions are valid.
 As a simple example, the following code fragment declares an external C function in the reserved namespace C:
 \begin{lstlisting}
-namespace C
+namespace C.libraryname
 {
-  // Library should be listed here. OS-dependent names?
+  void cfunction(int, char*, size_t, struct cstruct*)
 }
 \end{lstlisting}
+The C types recognized are listed in Appendix \ref{app:c_types}.
 
 \section{Twisted Standard Library -  defer to "French KISS" reference implementation}
   \subsection{Components}
@@ -219,7 +245,40 @@ The following program demonstrates the simplest of Concurrency features: a threa
   \subsection{Intermediate examples}
     \subsubsection{Calling C code}
 
+As described in Section \ref{sec:c_compatibility}
+
   \subsection{Advanced examples}
     \subsubsection{None yet}
+
+\appendix
+\section{Reserved file extensions}
+Table \ref{tab:file_extensions} is a comprehensive list of file extensions reserved and usable by the CTwist implementation.
+\begin{table}[h] \label{tab:file_extensions}
+\begin{tabular}{r|l}
+.?? & Module Description File: list of files to be compiled into one Twisted Object file. \\
+.ct & Source file \\
+.to & Twisted Object file: contains binary, linkable, JIT-able code
+\end{tabular}
+\end{table}
+
+\section{C compatibility}
+\subsection{ABI}
+
+\subsection{C Types} \label{app:c_types}
+Within \tcode{namespace C} sections one can use several fundamental C types, listed below:
+\begin{lstlisting}
+char
+short
+wchar_t
+int
+long
+long long
+float
+double
+_Bool
+_Complex
+\end{lstlisting}
+\tcode{unsigned} variants are also supported everywhere where they are legal in C.
+Fixed-size types (integer \tcode{intNN\_t} and character \tcode{charNN\_t} types) as first defined in C99 are supported natively, and using the CTwist typenames in those cases will guarantee the correct underlying C type is used where there might be ambiguity across different platforms or architectures.
 
 \end{document}
