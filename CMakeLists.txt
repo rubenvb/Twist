@@ -10,21 +10,21 @@
 
 cmake_minimum_required (VERSION 2.6)
 
-project(CTwist)
+project(Twist)
 if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 # Compiler
 file(GLOB compiler_source compiler/*.cpp)
 file(GLOB compiler_headers compiler/*.h)
 include_directories(${CTwist_SOURCE_DIR}/compiler)
-add_executable(ctwist ${compiler_source} ${compiler_headers})
+add_executable(twist ${compiler_source} ${compiler_headers})
 
 # runtime - built with new compiler
 
 # tests
 enable_testing()
-set(COMPILER_TESTS "${CTwist_SOURCE_DIR}/compiler/test")
-add_test("hello" ctwist 2>&1 )
+set(COMPILER_TESTS "${Twist_SOURCE_DIR}/compiler/test")
+add_test("hello" twist 2>&1 )
 

@@ -1,5 +1,8 @@
 *.asv
 *.aux
+*.dvi
+*.out
+*.ps
 *.log
 thesis.tex
 *.synctex.gz

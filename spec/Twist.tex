@@ -1,15 +1,23 @@
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,11pt]{report}
+
+\usepackage{geometry}
+\geometry{
+  includeheadfoot,
+  margin=2.54cm
+}
 
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily,numbers=left,numberstyle=\tiny,}
 
 \usepackage{multicol}
-
+\usepackage[colorlinks]{hyperref}
+\hypersetup{linkcolor=[rgb]{0.2,0.4,0.7}} % light blue link color\hyper
 \usepackage{verbatim}
 
 \newcommand{\tcode}[1]{\texttt{#1}}
+\newcommand{\eg}{\textit{e.g.}}
 
-\title{The CTwist, a Twisted C Language and Library Specification to take programming to infinity}
+\title{Twist, the twisted programming language\\Environment, language, and Library Specification}
 \date{in progress}
 \author{Ruben Van Boxem}
 
@@ -17,45 +25,77 @@
 
 \maketitle
 
-\newpage
-
 \tableofcontents
 \thispagestyle{empty}
-\newpage
 
-\section{Introduction}
+\chapter{Introduction}
 
-CTwist, aka Twisted C, is a language inspired by the rich featureset of C++.
-It is an attempt to simplify most incredibly daft points in the currect C++ language, clone the most useful features, and improve those features that were badly or nonuniformly designed.
-Although the aim is feature parity or even expansion, the syntax will be radically different in order to simplify the compilation process and improve the readability of previously written code.
-Not only will the library’s interface be more uniform, the archaic C standard library will be placed outside of CTwist’s world, being only callable as a foreign interface, if you really have no alternative.
-The Twisted C Standard Library will replace all necessary functionality contained in the C Standard library, ensuring a uniform callable interface without mixing inherent language style and intent.
+Twist, is a language inspired by the rich feature set of C++, unencumbered by syntactical compatibility with C and the syntactic awkwardness of some C++ constructs like templates.
+It is an attempt to simplify most incredibly daft points in the current C++ language, clone the most useful features, and improve those features that were badly or non-uniformly designed.
+Although the aim is feature parity and even expansion, the syntax will be radically different in order to simplify the compilation process, improve code readability, and enhance application development speed.
+Not only will the library's interface be more uniform, the archaic C standard library will be placed outside of Twist’s world, being only accessible as a foreign language interface, if you need some library written in C (as there are many).
+For this reason, and the basic low-level interoperation with the OS interfaces, the fundamental types in Twist will map transparently to the fundamental C types.
+The Twisted C Standard Library (TCSL) will replace all necessary functionality contained in the POSIX\footnote{IEEE Std 1003.1\texttrademark-2008, available online at \url{http://pubs.opengroup.org/onlinepubs/9699919799/} and part of the Single Unix Specification v4 available at \url{http://www.unix.org/version4/}} standard, ensuring a uniform callable interface without the need for the user to worry about the underlying platform.
 A shortlist of the most prominent features of Twisted C are listed below.
 
 \begin{itemize}
-  \item Strong, static typing,
-  \item Inheritable fundamental types,
-  \item Strong typedefs,
-  \item Classes,
-  \item Parametric polymorphism for functions and user-defined types,
-  \item Low level memory access (raw read-write to arbitrary memory locations),
-  \item Exceptions,
   \item No pre-processor,
-  \item ABI standardization (to the level of CTwist object code, different OSes enforce different low-level ABI’s CTwist cannot change),
-  \item Unicode support, inside and out,
-  \item Integrated multithreading in basic language constructs,
-  \item A large Standard library, including a lot of functionality that has been wrapped over and over by different C and C++ libraries like Boost, Qt, etc...
-  \item JIT execution of code through LLVM's JIT capabilities,
-  \item Type inference?
-  \item User-defined operators?
-  \item Integrated documentation generation (to replace readable headers)?
+  \item Static typing with type inference,
+  \item Strong typedefs and weak aliases,
+  \item User-defined objects,
+  \item Generic constructs,
+  \item Low level memory access (raw read-write to arbitrary locations in memory in the program's address space),
+  \item Exceptions,
+  \item Standardized name mangling and low-level-runtime library.
+  \item Unicode support, inside and out (this ``out" will take a while to complete...),
+  \item Integrated multithreading in basic constructs like algorithms and control structures,
+  \item A full Standard library.
+  \item Integrated flexible documentation system
 \end{itemize}
-Example programs with a tutorial-like explanation can be found in section \ref{sec:examples}, displaying typical syntax to express common programming constructs.
+Example programs with a tutorial-like explanation can be found in section \ref{sec:examples}, displaying typical syntax to express simple examples.
+
+\chapter{Environment}
+
+Twist relies on a system interface (\eg the system's C library).
+This environment should provide basic math, I/O and other system interfaces, and some form of low-level exception handling.
+This chapter is concerned with strictly defining the environment that a Twist compiler operates in.
+
+\section{Compilation}
+
+A Twist compiler shall take Twist \hyperref[sec:source_files]{\emph{source files}}, and produce Twist \hyperref[sec:object_files]{\emph{object files}}.
+These object files can be \hyperref[sec:linking]{linked} into a final \hyperref[sec:shared_objects]{shared object} or \hyperref[sec:executables]{executable} described in a \hyperref[sec:module_description_files]{module description file}.
+
+TODO: explain the actual compilation process, needs explanation of module system.
+
+\section{Twist files}
+
+\subsubsection{Source files} \label{sec:source_files}
+
+The textual source code input for a Twist compiler can be from a file or other implementation defined I/O device (\eg standard input).
+Source files shall be named \tcode{\textit{filename}.t}.
+Source files shall be encoded in UTF-8.
+
+\subsubsection{Object files} \label{sec:object_files}
+
+Object files contain everything needed by the compiler, linker and documentation system to work efficiently.
+Object files shall be named \tcode{\textit{filename}.to}.
+Object files shall be binary files.
+All plain text contained
+The code is translated into a mostly platform independent representation to account for generics and quick compilation.
+
+\subsubsection{Module description files} \label{sec:module_description_files}
+
+
+\section{Final output}
+
+
+
 
 \section{Files and environment}
 
-In an attempt to bring order to the chaos that C-like languages face and cause a lot of grief for programmers, CTwist defines the following strict rules to be followed in all files involved in CTwist source and object code.
-All files will be encoded in UTF-8 to avoid byte order issues or obsolete system encodings being used.
+In an attempt to bring order to the chaos that C-like languages face and cause a lot of grief for programmers, Twist defines the following strict rules to be followed in all files involved in Twist source and object code.
+All text will be encoded in UTF-8\footnote{See the Unicode Standard, Chapter 2} to avoid byte order issues or obsolete system encodings being used.
+The presence of a Byte Order Mark (BOM)\footnote{The UTF-8 BOM in hexadecimal notation is the byte sequence \tcode{EF BB BF}: some platform’s editors add this} is allowed, but not required.
 
   \subsection{Module description files}
 
@@ -78,12 +118,12 @@ In the simplest case, one can also use the following form:
 \begin{lstlisting}
 *.ct
 \end{lstlisting}
-The \tcode{*} is a universal wildcard, which can be replaced by any number of any characters, thus gathering all the 
+The \tcode{*} is a universal wildcard, which can be replaced by any number of any characters (except the directory seperator \tcode{/}), thus gathering all source files in a simple and readable manner.
 
   \subsection{Source files}
 
-Both \verb \ \tcode{n} and \verb \ \tcode{r} \verb \ \tcode{n} will be valid and must be accepted interchangeable by the compiler (different files may have different line endings, one line ending type per file).
-\\ ...
+Source files are plain text files containing no hidden binary data.
+Both \verb \ \tcode{n} and \verb \ \tcode{r} \verb \ \tcode{n} line endings will be valid and must be accepted interchangeable by the compiler (different files may have different line endings, one line ending type per file).
 
   \subsection{Binary files}
 
@@ -104,7 +144,7 @@ Optionally, legacy C code can be linked in through a compatibility interface \re
 
   \subsection{Intermediate files}
 
-Intermediate files contain everything the CTwist compiler needs to generate native binaries.
+Intermediate files contain everything the Twist compiler needs to generate native binaries.
 Nothing prevents an implementation to only provide a compiler AST representation in an intermediate file.
 This will allow for all forms of syntax and well-formedness checking, but is a bit inefficient to debug exection (code will have to be generated over and over).
 Along with AST representation of code, LLVM bytecode of non-generic constructs can be present.
@@ -117,7 +157,7 @@ Hybrid files contain non-native code and
   \subsection{Compilation model}
     \subsubsection{Phases of translation}
 
-Translation is the process in which a CTwist compiler converts source code input into a Twisted Object file or 
+Translation is the process in which a Twist compiler converts source code input into a Twisted Object file or 
 
     \subsubsection{Reference implementation}
 
@@ -146,9 +186,9 @@ The result is that multiple Twisted Objects with entry points defined can be lin
 \section{C compatibility} \label{sec:c_compatibility}
 
 Most if, not all, OS APIs are written in C.
-CTwist, as a flexible compiled language, has an easy interface to C libraries.
+Twist, as a flexible compiled language, has an easy interface to C libraries.
 The basic C integer types and pointers to structs are allowed in C interface declarations.
-Other additional keywords are ignored and it is the task of the interface user to ensure the CTwist wrapper ensures the calls to the external functions are valid.
+Other additional keywords are ignored and it is the task of the interface user to ensure the Twist wrapper ensures the calls to the external functions are valid.
 As a simple example, the following code fragment declares an external C function in the reserved namespace C:
 \begin{lstlisting}
 namespace C.libraryname
@@ -187,7 +227,7 @@ Below is the list of Library Components in the Twisted Standard Library.
 Below is a detailed description of what each Component contains and how different Components can work together.
 TODO
 
-\section{Examples}
+\section{Examples} \label{sec:examples}
 This section contains expressive and classic examples of programs and constructs often employed in tutorial or real programs and libraries.
 
   \subsection{Beginner-level examples}
@@ -199,10 +239,10 @@ It presents the minimal program structure and introduces a way to do textual out
 \begin{lstlisting}
 entry
 {
-    std.io.print( "Hello World!" )
+  std.io.print( "Hello World!" )
 }
 \end{lstlisting}
-\lstinline|entry| is CTwist's version of the \lstinline|main| function in languages like C, C++, C\# or Java.
+\lstinline|entry| is Twist's version of the \lstinline|main| function in languages like C, C++, C\# or Java.
 In contrast to other, more primitive languages, it takes no arguments under any circumstances.
 It has no return type, and is not strictly a function that could be called in a devious manner.
 A code block is surrounded by \tcode{\{} and \tcode{\}} and is used to designate several lines of code are to be seen as one entity.
@@ -252,7 +292,7 @@ As described in Section \ref{sec:c_compatibility}
 
 \appendix
 \section{Reserved file extensions}
-Table \ref{tab:file_extensions} is a comprehensive list of file extensions reserved and usable by the CTwist implementation.
+Table \ref{tab:file_extensions} is a comprehensive list of file extensions reserved and usable by the Twist implementation.
 \begin{table}[h] \label{tab:file_extensions}
 \begin{tabular}{r|l}
 .?? & Module Description File: list of files to be compiled into one Twisted Object file. \\
@@ -273,12 +313,14 @@ wchar_t
 int
 long
 long long
+char16_t
+char32_t
 float
 double
 _Bool
 _Complex
 \end{lstlisting}
 \tcode{unsigned} variants are also supported everywhere where they are legal in C.
-Fixed-size types (integer \tcode{intNN\_t} and character \tcode{charNN\_t} types) as first defined in C99 are supported natively, and using the CTwist typenames in those cases will guarantee the correct underlying C type is used where there might be ambiguity across different platforms or architectures.
+Fixed-size types (integer \tcode{int[least]NN\_t} types) as first defined in C99 are supported natively, and using the Twist typenames in those cases will guarantee the correct underlying C type is used where there might be ambiguity across different platforms or architectures.
 
 \end{document}
