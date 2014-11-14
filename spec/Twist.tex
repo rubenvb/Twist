@@ -1,10 +1,7 @@
 \documentclass[a4paper,11pt]{report}
 
 \usepackage{geometry}
-\geometry{
-  includeheadfoot,
-  margin=2.54cm
-}
+\geometry{includeheadfoot, margin=2.54cm}
 
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily,numbers=left,numberstyle=\tiny,}
@@ -17,7 +14,7 @@
 \newcommand{\tcode}[1]{\texttt{#1}}
 \newcommand{\eg}{\textit{e.g.}}
 
-\title{Twist, the twisted programming language\\Environment, language, and Library Specification}
+\title{Twist, the Twisted Programming Language\\Environment, Language, and Library Specification}
 \date{in progress}
 \author{Ruben Van Boxem}
 
@@ -33,24 +30,24 @@
 Twist, is a language inspired by the rich feature set of C++, unencumbered by syntactical compatibility with C and the syntactic awkwardness of some C++ constructs like templates.
 It is an attempt to simplify most incredibly daft points in the current C++ language, clone the most useful features, and improve those features that were badly or non-uniformly designed.
 Although the aim is feature parity and even expansion, the syntax will be radically different in order to simplify the compilation process, improve code readability, and enhance application development speed.
-Not only will the library's interface be more uniform, the archaic C standard library will be placed outside of Twist’s world, being only accessible as a foreign language interface, if you need some library written in C (as there are many).
+Not only will the library's interface be more uniform, the archaic C standard library will be placed outside of Twist's world, being only accessible as a foreign language interface, if you need some library written in C (as there are many).
 For this reason, and the basic low-level interoperation with the OS interfaces, the fundamental types in Twist will map transparently to the fundamental C types.
-The Twisted C Standard Library (TCSL) will replace all necessary functionality contained in the POSIX\footnote{IEEE Std 1003.1\texttrademark-2008, available online at \url{http://pubs.opengroup.org/onlinepubs/9699919799/} and part of the Single Unix Specification v4 available at \url{http://www.unix.org/version4/}} standard, ensuring a uniform callable interface without the need for the user to worry about the underlying platform.
-A shortlist of the most prominent features of Twisted C are listed below.
+The Twisted Standard Library (TSL) will  provide all basic system functionality by wrapping either POSIX\footnote{IEEE Std 1003.1\texttrademark-2008, available online at \url{http://pubs.opengroup.org/onlinepubs/9699919799/} and part of the Single Unix Specification v4 available at \url{http://www.unix.org/version4/}} and the Windows system API, ensuring a uniform callable interface without the need for the user to worry about the underlying platform.
+A shortlist of the most prominent features of Twist are listed below.
 
 \begin{itemize}
-  \item No pre-processor,
-  \item Static typing with type inference,
-  \item Strong typedefs and weak aliases,
-  \item User-defined objects,
-  \item Generic constructs,
-  \item Low level memory access (raw read-write to arbitrary locations in memory in the program's address space),
-  \item Exceptions,
-  \item Standardized name mangling and low-level-runtime library.
-  \item Unicode support, inside and out (this ``out" will take a while to complete...),
-  \item Integrated multithreading in basic constructs like algorithms and control structures,
-  \item A full Standard library.
-  \item Integrated flexible documentation system
+ \item No pre-processor,
+ \item Static typing with type inference,
+ \item Strong typedefs and weak aliases,
+ \item User-defined objects,
+ \item Generic constructs,
+ \item Low level memory access (raw read-write to arbitrary valid locations in memory in the program's address space),
+ \item Exceptions,
+ \item Standardized ABI and low-level-runtime library.
+ \item Unicode support, inside and out (this ``out" will take a while to complete...),
+ \item Integrated multithreading in basic constructs like algorithms and control structures,
+ \item A full Standard library, including common system functionality.
+ \item Integrated flexible documentation system
 \end{itemize}
 Example programs with a tutorial-like explanation can be found in section \ref{sec:examples}, displaying typical syntax to express simple examples.
 
@@ -67,65 +64,76 @@ These object files can be \hyperref[sec:linking]{linked} into a final \hyperref[
 
 TODO: explain the actual compilation process, needs explanation of module system.
 
-\section{Twist files}
+\section{Twisted files}
 
 \subsubsection{Source files} \label{sec:source_files}
 
-The textual source code input for a Twist compiler can be from a file or other implementation defined I/O device (\eg standard input).
+The textual source code input for a Twisted compiler can be from a file or other implementation defined I/O device (\eg standard input).
 Source files shall be named \tcode{\textit{filename}.t}.
-Source files shall be encoded in UTF-8.
 
 \subsubsection{Object files} \label{sec:object_files}
 
 Object files contain everything needed by the compiler, linker and documentation system to work efficiently.
 Object files shall be named \tcode{\textit{filename}.to}.
 Object files shall be binary files.
-All plain text contained
-The code is translated into a mostly platform independent representation to account for generics and quick compilation.
+These object files serve as libraries in one go.
 
 \subsubsection{Module description files} \label{sec:module_description_files}
 
 
 \section{Final output}
 
-
-
+The final output comes in three forms:
+\begin{enumerate}
+ \item Native executable
+ \item Twisted module: contains documentation, debugging info, and Twisted object files
+ \item Native shared library
+\end{enumerate}
+Things to keep in mind:
+\begin{itemize}
+ \item Twisted modules contain "development files" which the Twisted compiler can use to generate native code from language-level constructs. This means that depending on the executables being built, a possible resulting shared library may be different for each one separately due to the generics used.
+ \item Executables and shared libraries are the re-distributable components of the output: these alone suffice to run a program written in Twist. Shared libraries are optional, and all code can be baked into the executable directly.
+\end{itemize}
 
 \section{Files and environment}
 
 In an attempt to bring order to the chaos that C-like languages face and cause a lot of grief for programmers, Twist defines the following strict rules to be followed in all files involved in Twist source and object code.
 All text will be encoded in UTF-8\footnote{See the Unicode Standard, Chapter 2} to avoid byte order issues or obsolete system encodings being used.
-The presence of a Byte Order Mark (BOM)\footnote{The UTF-8 BOM in hexadecimal notation is the byte sequence \tcode{EF BB BF}: some platform’s editors add this} is allowed, but not required.
+The presence of a Byte Order Mark (BOM)\footnote{The UTF-8 BOM in hexadecimal notation is the byte sequence \tcode{EF BB BF}: some platforms' editors add this} is allowed, but not required.
 
-  \subsection{Module description files}
+\subsection{Module description files}
 
 Module description files are nothing more than a list of source files to be compiled at once into a Twisted Module.
 This avoids two platform-specific problems:
 \begin{enumerate}
-  \item commandline length limit if there are a lot of files,
-  \item unicode filenames that may nor be easily usable on the commandline.
+ \item commandline length limit if there are a lot of files,
+ \item unicode filenames that may nor be easily usable on the commandline.
 \end{enumerate}
 The file has the following format:
 \begin{lstlisting}
-file1.ct
-file2.ct
-directory/file3.ct
-../otherdirectory/file4.ct
+ file1.t
+ file2.t
+ directory/file3.t
+ ../otherdirectory/file4.t
 \end{lstlisting}
 Although it is discouraged to use \tcode{..} for module files, it may not be possible everywhere.
 The directories are searched relative to the location of the module description file.
 In the simplest case, one can also use the following form:
 \begin{lstlisting}
-*.ct
+*.t
 \end{lstlisting}
 The \tcode{*} is a universal wildcard, which can be replaced by any number of any characters (except the directory seperator \tcode{/}), thus gathering all source files in a simple and readable manner.
+An alternative for \tcode{*} is \tcode{?}, which only replaces a single character of a filename.
+The behaviour of these wildcards is the same as the OS functions \tcode{fnmatch} and \tcode{FindFirstFileW}, if these differ substantially I'll think of a better way to define their behaviour, in the meantime this will suffice.
 
-  \subsection{Source files}
+\subsection{Source files}
 
 Source files are plain text files containing no hidden binary data.
 Both \verb \ \tcode{n} and \verb \ \tcode{r} \verb \ \tcode{n} line endings will be valid and must be accepted interchangeable by the compiler (different files may have different line endings, one line ending type per file).
+This means that once \verb \ \tcode{n} is encountered, a subsequent \verb \ \tcode{r} will lead to an error.
+Encountering a \verb \tcode{r} without a \verb \ \tcode{n} right after it, will also lead to an error.
 
-  \subsection{Binary files}
+\subsection{Binary files}
 
 Binary files can take two forms: native and intermediate.
 Native files contain only architecture/OS-native code that can be executed or loaded by the targetted OS.
